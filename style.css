@@ -62,6 +62,14 @@ button {
     font-size: 20px;
     text-align: center;
 }
+button:hover{
+    background: #000;
+}
+button:active{
+    background-color: hsla(240, 12%, 56%, 0.212);
+    color: #000;
+
+}
 
 #clear {
     width: 140px;
