@@ -2,7 +2,9 @@
     padding: 0;
     margin: 0;
 }
-
+body{
+    background: #000000be;
+}
 .container {
     background-color: rgb(40, 40, 51);
     height: 480px;
