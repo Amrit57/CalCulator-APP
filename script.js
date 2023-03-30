@@ -1,70 +1,71 @@
-// accesing html  Elements 
-const userInputScreen = document.querySelector('.input');
-const finalResultScreen = document.querySelector('.main-result');
-const numbers = document.querySelectorAll(".number");
-const operators = document.querySelectorAll(".operators");
-const equalbtn = document.querySelector(".evaluate");
-const clearbtn = document.querySelector("#clear");
-const deletebtn = document.querySelector("#delete");
+const inputScreen = document.querySelector(".input");
+const finalResultScreen = document.querySelector(".main-result");
+const clearBtn = document.querySelector("#clear");
+const deleteBtn = document.querySelector('#delete')
+const numbersBtn = document.querySelectorAll(".number");
+const equalToBtn = document.querySelector('.equalto');
+const operatorBtn = document.querySelectorAll(".operators");
 
-//creating variables 
-let currentScreenValue = '';
-let finalScreenValue = '';
-let operands = null;
-
-//event to show numbers in screen
-numbers.forEach((number) => {
-    number.onclick = appendNumber;
+//Adding events in NumberButton to display.
+numbersBtn.forEach((number) => {
+    number.addEventListener('click', appendNumber);
 })
-//event to show operator sign in screen
-operators.forEach((operator) => {
-    operator.onclick = appendNumber;
-    operator.onclick = operate;
+operatorBtn.forEach((operator) => {
+    // operator.addEventListener('click', appendNumber);
+    operator.addEventListener('click', () => storeFirstValue(operator.textContent));
+    ;
 })
-//event to clear screem amd remove a digit.
-clearbtn.addEventListener('click', clear);
-deletebtn.addEventListener('click', remove);
+// Variables to contain a number, operator, another number.
+let firstNumber = '';
+let currentOperator = null;
+let secondNumber = '';
 
-//function that appends the text to show in screen.
-function appendNumber(e) {
-    let value = e.target.textContent;
-    userInputScreen.textContent += value;
-}
+clearBtn.addEventListener('click', clear);
+deleteBtn.addEventListener('click', remove);
+equalToBtn.addEventListener('click', equalTo);
 
-//function that clears the screen
 function clear() {
-    userInputScreen.textContent = '0';
+    inputScreen.textContent = '';
     finalResultScreen.textContent = '';
+    firstNumber = '';
+    secondNumber = '';
+    currentOperator = null;
 }
-//function that removes the last digit from screen.
 function remove() {
-    userInputScreen.textContent = userInputScreen.textContent.toString().slice(0, -1);
+    inputScreen.textContent = inputScreen.textContent.toString().slice(0, -1);
+}
+// function that populates the display with numbers when clicked. 
+function appendNumber(e) {
+    let value = e.target.textContent
+    inputScreen.textContent += value;
+}
+function resetScreen() {
+    inputScreen.textContent = '';
+}
+function storeFirstValue(operatorSign) {
+    if (currentOperator !== null ) {
+        
+        return equalTo();
+    };
+    firstNumber = inputScreen.textContent;
+    currentOperator = operatorSign;
+    finalResultScreen.textContent = `${firstNumber} ${currentOperator}`
+    resetScreen();
 
 }
-
-//function that equals and returns the total value.
-function equal () {}
-
-
-
-//function that runs the calculation.
-function operate(operator, a, b) {
-    a = Number(a);
-    b = Number(b);
-    switch (operator) {
-        case "+": add(a, b);
-            break;
-        case "-": subtract(a, b);
-            break;
-        case "×": multiply(a, b)
-            break;
-        case "÷": divide(a, b);
-            break;
-        default: null;
-            break;
-    }
+function equalTo() {
+    if (currentOperator === null) return;
+    secondNumber = inputScreen.textContent
+    result = operate(currentOperator, firstNumber, secondNumber);
+    inputScreen.textContent = roundOf(result);
+    finalResultScreen.textContent = roundOf(result);
+    currentOperator = null;
+}
+function roundOf(number) {
+    return Math.round(number * 1000) / 1000;
 }
 
+//function which calculates
 function add(a, b) {
     return a + b;
 }
@@ -76,4 +77,19 @@ function multiply(a, b) {
 }
 function divide(a, b) {
     return a / b;
+}
+
+//Function which takes operator and calls functions to operate 2 numbers.
+function operate(operatorSign, a, b) {
+    a = Number(a);
+    b = Number(b);
+    if (operatorSign == '+') {
+        return add(a, b);
+    } else if (operatorSign == '-') {
+        return subtract(a, b);
+    } else if (operatorSign == '÷') {
+        return divide(a, b);
+    } else if (operatorSign == '×') {
+        return multiply(a, b);
+    }
 }
